@@ -1,0 +1,6 @@
+name: DiverseScavenger
+version: 1.0
+author: Jok1r
+main: ru.jok1r.diverseScavenger.Main
+commands:
+  dsaver:
