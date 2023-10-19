@@ -1,5 +1,9 @@
 debug: false
 
+messages:
+  tryDropItem: '&7>> Вы не можете выбросить данный предмет!'
+  tryMoveItem: '&7>> Перемещение предмета запрещено!'
+
 items:
   - 1
   - 2

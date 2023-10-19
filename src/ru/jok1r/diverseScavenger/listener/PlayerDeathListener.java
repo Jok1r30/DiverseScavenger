@@ -1,4 +1,4 @@
-package ru.jok1r.diverseScavenger;
+package ru.jok1r.diverseScavenger.listener;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,15 +8,16 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import ru.jok1r.diverseScavenger.Main;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiverseDeathListener implements Listener {
+public class PlayerDeathListener implements Listener {
 
     private final Main plugin;
 
-    public DiverseDeathListener(Main plugin) {
+    public PlayerDeathListener(Main plugin) {
         this.plugin = plugin;
     }
 
@@ -29,16 +30,18 @@ public class DiverseDeathListener implements Listener {
                 this.plugin.data.put(player.getName(), itemsToSave);
                 event.getDrops().clear();
             } else {
-                if (this.plugin.isDebugging)
+                if (this.plugin.isDebugging) {
                     this.plugin.getLogger().severe("DS: Player " + player.getName() + " is dead :(");
                     this.plugin.getLogger().severe("DS (" + player.getName() + "): Inventory: " + event.getDrops().toString());
+                }
 
                 List<ItemStack> itemsToSave = new ArrayList();
                 for (ItemStack itemStack : event.getDrops()) {
                     if (this.plugin.itemsToSave.contains(itemStack.getTypeId())) {
                         itemsToSave.add(itemStack);
-                        if (this.plugin.isDebugging)
+                        if (this.plugin.isDebugging) {
                             this.plugin.getLogger().severe("DS (" + player.getName() + "): " + itemStack.getItemMeta().getDisplayName() + " is saved");
+                        }
 
                     }
                 }
@@ -62,22 +65,24 @@ public class DiverseDeathListener implements Listener {
         Player player = event.getPlayer();
         if(this.plugin.data.containsKey(player.getName())) {
             List<ItemStack> itemsToSave = this.plugin.data.get(player.getName());
-            if(this.plugin.isDebugging)
+            if(this.plugin.isDebugging) {
                 this.plugin.getLogger().severe("DS: Player" + player.getName() + " is alive! Backing items");
                 this.plugin.getLogger().severe("DS (" + player.getName() + "): items to save = " + itemsToSave.toString());
+            }
 
             PlayerInventory inventory = player.getInventory();
-            if(!itemsToSave.isEmpty()) {
+/*            if(!itemsToSave.isEmpty()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e>> После смерти вы сохранили некоторые вещи"));
-            }
+            }*/
 
             int i = 0;
             for(ItemStack item: itemsToSave) {
                 inventory.setItem(i, item);
                 i++;
 
-                if(this.plugin.isDebugging)
+                if(this.plugin.isDebugging) {
                     this.plugin.getLogger().severe("DS (" + player.getName() + "): " + item.getItemMeta().getDisplayName() + " set to inventory in slot = " + i);
+                }
             }
             this.plugin.data.remove(player.getName());
         }
