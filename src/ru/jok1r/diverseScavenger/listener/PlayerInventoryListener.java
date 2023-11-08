@@ -21,7 +21,6 @@ public class PlayerInventoryListener implements Listener {
         this.plugin = plugin;
     }
 
-
     @EventHandler(priority= EventPriority.HIGHEST)
     public void invokeClick(InventoryClickEvent e) {
         if (e.getWhoClicked().isOp()) {
@@ -42,8 +41,7 @@ public class PlayerInventoryListener implements Listener {
 
         ItemStack itemCursor = e.getCursor();
         ItemStack currentItem = e.getCursor();
-        if ((itemCursor != null && this.plugin.itemsToSave.contains(itemCursor.getTypeId())) ||
-                (currentItem != null && this.plugin.itemsToSave.contains(currentItem.getTypeId()))) {
+        if ((itemCursor != null && this.plugin.isPersonalItem(itemCursor)) || (currentItem != null && this.plugin.isPersonalItem(currentItem))) {
             if (type == InventoryType.PLAYER || type == InventoryType.ENDER_CHEST || type == InventoryType.CRAFTING) {
                 return;
             }

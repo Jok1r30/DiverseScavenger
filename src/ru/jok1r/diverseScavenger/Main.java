@@ -2,7 +2,6 @@ package ru.jok1r.diverseScavenger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,19 +10,20 @@ import ru.jok1r.diverseScavenger.listener.PlayerDropItemListener;
 import ru.jok1r.diverseScavenger.listener.PlayerInventoryListener;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 public class Main extends JavaPlugin {
 
-    public File config;
-    public FileConfiguration configuration;
-    public List<Integer> itemsToSave;
     public Map<String, List<ItemStack>> data;
 
     public boolean isDebugging;
+
+    public String loreCantDrop;
+    public String lorePersonal;
+
     public String tryDropItem;
     public String tryMoveItem;
 
@@ -32,9 +32,9 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new PlayerDropItemListener(this), this);
         this.getServer().getPluginManager().registerEvents(new PlayerInventoryListener(this), this);
 
-        this.getCommand("dsaver").setExecutor(new DiverseCommandScavengerExecutor(this));
+        this.getCommand("dscavenger").setExecutor(new DiverseCommandScavengerExecutor(this));
 
-        final File file = new File(this.getDataFolder(), "regeneration.data");
+        final File file = new File(this.getDataFolder(), "recovery.data");
         if(file.exists()) {
             try {
                 FileInputStream fileInputStream = new FileInputStream(file);
@@ -46,6 +46,30 @@ public class Main extends JavaPlugin {
         }
 
         this.register();
+    }
+
+    public boolean isToSaveItem(ItemStack stack) {
+        if(stack != null && stack.hasItemMeta() && stack.getItemMeta().hasLore()) {
+            for (String lore : stack.getItemMeta().getLore()) {
+                if(lore.contains(this.loreCantDrop)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isPersonalItem(ItemStack stack) {
+        if(stack != null && stack.hasItemMeta() && stack.getItemMeta().hasLore()) {
+            for (String lore : stack.getItemMeta().getLore()) {
+                if(lore.contains(this.lorePersonal)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public void onDisable() {
@@ -71,21 +95,19 @@ public class Main extends JavaPlugin {
 
 
     public void register() {
-        config = new File(getDataFolder(), "config.yml");
+        File config = new File(getDataFolder(), "config.yml");
         if(!config.exists()) {
             saveResource("config.yml", false);
         }
 
-        configuration = YamlConfiguration.loadConfiguration(config);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(config);
         this.isDebugging = configuration.getBoolean("debug");
+
+        this.loreCantDrop = configuration.getString("lore.cantDrop");
+        this.lorePersonal = configuration.getString("lore.personal");
 
         this.tryDropItem = configuration.getString("messages.tryDropItem");
         this.tryMoveItem = configuration.getString("messages.tryMoveItem");
-
-        this.data = new HashMap<String, List<ItemStack>>();
-
-        this.itemsToSave = new ArrayList<Integer>();
-        this.itemsToSave = (List<Integer>) configuration.getList("items");
     }
 
     public void sendMessage(CommandSender sender, String message) {

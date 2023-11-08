@@ -37,7 +37,7 @@ public class PlayerDeathListener implements Listener {
 
                 List<ItemStack> itemsToSave = new ArrayList();
                 for (ItemStack itemStack : event.getDrops()) {
-                    if (this.plugin.itemsToSave.contains(itemStack.getTypeId())) {
+                    if (this.plugin.isPersonalItem(itemStack) || this.plugin.isToSaveItem(itemStack)) {
                         itemsToSave.add(itemStack);
                         if (this.plugin.isDebugging) {
                             this.plugin.getLogger().severe("DS (" + player.getName() + "): " + itemStack.getItemMeta().getDisplayName() + " is saved");
@@ -71,9 +71,9 @@ public class PlayerDeathListener implements Listener {
             }
 
             PlayerInventory inventory = player.getInventory();
-/*            if(!itemsToSave.isEmpty()) {
+            if(!itemsToSave.isEmpty()) {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e>> После смерти вы сохранили некоторые вещи"));
-            }*/
+            }
 
             int i = 0;
             for(ItemStack item: itemsToSave) {

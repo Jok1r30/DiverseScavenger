@@ -31,13 +31,12 @@ public class PlayerDropItemListener implements Listener {
             return;
         }
 
-        if(!this.plugin.itemsToSave.contains(e.getItemDrop().getItemStack().getTypeId())) {
+        if(!this.plugin.isToSaveItem(e.getItemDrop().getItemStack()) && !this.plugin.isPersonalItem(e.getItemDrop().getItemStack())) {
             return;
         }
 
         e.setCancelled(true);
         this.plugin.sendMessage(e.getPlayer(), this.plugin.tryDropItem);
-
 /*        PersonalManager personalManager = PersonalManager.INSTANCE;
         if (personalManager.isPersonal(e.getItemDrop().getItemStack())) {
             e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes((char)'&', (String)personalManager.getDropDeny()));

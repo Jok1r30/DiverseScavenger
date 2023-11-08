@@ -40,26 +40,6 @@ public class DiverseCommandScavengerExecutor implements CommandExecutor {
             return false;
         }
 
-        if(args[0].equals("add")) {
-            ItemStack stack = ((Player) sender).getItemInHand();
-            if(stack == null || stack.getType().equals(Material.AIR)) {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c>> Для использования этой команды нужно взять предмет в руки!"));
-                return false;
-            }
-
-            int id = stack.getTypeId();
-            this.plugin.itemsToSave.add(id);
-            this.plugin.configuration.set("items", this.plugin.itemsToSave);
-            try {
-                this.plugin.configuration.save(this.plugin.config);
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e>> Предмет был успешно добавлен!"));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return false;
-        }
         return false;
     }
 }

@@ -1,8 +1,9 @@
-debug: true
+debug: false
 
-items:
-  - 1
-  - 2
-  - 3
-  - 4
-  - 6
+messages:
+  tryDropItem: '&7>> Вы не можете выбросить данный предмет!'
+  tryMoveItem: '&7>> Перемещение предмета запрещено!'
+
+lore:
+  cantDrop: 'Не выпадает при смерти'
+  personal: 'Персональный предмет'
