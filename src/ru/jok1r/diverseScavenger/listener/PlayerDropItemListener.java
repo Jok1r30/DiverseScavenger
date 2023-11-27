@@ -31,7 +31,7 @@ public class PlayerDropItemListener implements Listener {
             return;
         }
 
-        if(!this.plugin.isToSaveItem(e.getItemDrop().getItemStack()) && !this.plugin.isPersonalItem(e.getItemDrop().getItemStack())) {
+        if(!this.plugin.isPersonalItem(e.getItemDrop().getItemStack())) {
             return;
         }
 
